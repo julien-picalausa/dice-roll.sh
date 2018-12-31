@@ -1,0 +1,61 @@
+#!/bin/sh
+
+roll_die() {
+	random=$(head -c 1 /dev/urandom)
+	random=$(printf "%d" "'$random")
+	result=$(( $random * $1 / 256 + 1 ))
+	echo -n $result
+	return $result
+}
+
+sum=0
+
+output=""
+
+IFS=" +"
+set -- $*
+unset IFS
+
+for arg in $*; do
+	case $arg in
+		*d*)
+			number=${arg%%d*}
+			die=${arg##*d}
+
+			color=""
+			color_end="\033[0m"
+
+			case $die in
+				*r)
+					color="\033[1;31m"
+					die=${die%r};;
+				*g)
+					color="\033[1;32m"
+					die=${die%g};;
+				*b)
+					color="\033[1;34m"
+					die=${die%b};;
+				*y)
+					color="\033[1;33m"
+					die=${die%y};;
+				*c)
+					color="\033[1;36m"
+					die=${die%c};;
+				*m)
+					color="\033[1;35m"
+					die=${die%m};;
+			esac
+
+			for i in `seq 1 $number`; do
+				output="$output+ $color$(roll_die $die)$color_end "
+				sum=$(( $sum + $? ))
+			done;;
+		*)
+			output="$output+ $arg "
+			sum=$(( $sum + $arg ));;
+	esac
+done
+
+output=$output"= $sum"
+
+echo -e ${output#"+ "}
