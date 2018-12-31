@@ -1,7 +1,7 @@
 # dice-roll.sh
 Dice rolling sh script with colorized output
 
-This is  a simple shell script. `/dev/urandom` is used for randomness. No bashism, so I expect it to run in most environment
+This is  a simple shell script. `/dev/urandom` is used for randomness. No bashism, so I expect it to run in most environments
 
 ## Usage
 
