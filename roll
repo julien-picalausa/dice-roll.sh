@@ -1,8 +1,12 @@
 #!/bin/sh
 
 roll_die() {
-	random=$(od -N 1 -t u /dev/urandom | awk '{if (NF >= 2) {print $2;}}')
-	result=$(( $random * $1 / 256 + 1 ))
+	max_random=$((65536 / $1 * $1 ))
+	random=65536
+	while [ $random -ge $max_random ]; do
+		random=$(od -N 2 -t u /dev/urandom | awk '{if (NF >= 2) {print $2;}}')
+	done
+	result=$(( $random % $1 + 1 ))
 	echo -n $result
 	return $result
 }
